@@ -1,0 +1,10 @@
+{
+  "REQUEST": {
+    "pNo": "TECH001",
+    "firstName": "Viki",
+    "lastName": "Kip",
+    "email": "viki@tech1.com",
+    "addressId": "1",
+    "departmentId": "1"
+  }
+}
