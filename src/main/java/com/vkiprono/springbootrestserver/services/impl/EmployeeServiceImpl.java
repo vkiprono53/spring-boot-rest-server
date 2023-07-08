@@ -2,10 +2,10 @@ package com.vkiprono.springbootrestserver.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.vkiprono.springbootrestserver.constants.EmployeeConstant;
 import com.vkiprono.springbootrestserver.dtos.*;
 import com.vkiprono.springbootrestserver.models.Employee;
-import com.vkiprono.springbootrestserver.respositories.AddressRepository;
 import com.vkiprono.springbootrestserver.respositories.EmployeeRepository;
 import com.vkiprono.springbootrestserver.services.AddressServiceI;
 import com.vkiprono.springbootrestserver.services.EmployeeServiceI;
@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
 
 
     @Override
-    public EmployeeDTO findEmployeeByPNo(String pNo) {
+    public EmployeeDTO findEmployeeByPNo(String pNo) throws Exception{
         LOGGER.info(":::::START EmployeeServiceImpl.findEmployeeByPNo():::::");
         Employee employee = new Employee();
         EmployeeDTO dto = null;
@@ -67,22 +67,16 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
 
     //Saving Employee and Address Dtls
     @Override
-    public EmployeeDTO save(String employeeDtls) throws JsonProcessingException {
+    public EmployeeDTO save(EMPREQUESTSAVE empSaveRequestDTO) throws Exception {
         LOGGER.info(":::::START EmployeeServiceImpl.save():::::");
 
-        ObjectMapper objectMapper = new ObjectMapper();
         EmpSaveRequestDTO requestDTO = new EmpSaveRequestDTO();
-        EMPREQUESTSAVE empSaveRequestDTO = new EMPREQUESTSAVE();
         EmployeeDTO employeeDTO = new EmployeeDTO();
         AddressDTO addressDTO = new AddressDTO();
         Employee employee = new Employee();
 
         Long employeeId = null;
 
-
-        if (employeeDtls != null) {
-            empSaveRequestDTO = objectMapper.readValue(employeeDtls, EMPREQUESTSAVE.class);
-        }
         if (empSaveRequestDTO != null) {
             employeeDTO = empSaveRequestDTO.getRequestDTO().getEmployeeDTO();
             addressDTO = empSaveRequestDTO.getRequestDTO().getAddressDTO();
@@ -112,24 +106,17 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
 
     //Update
     @Override
-    public EmployeeDTO update(String employeeDtls) throws JsonProcessingException {
+    public EmployeeDTO update(EMPREQUESTSAVE empSaveRequestDTO) throws Exception {
 
         LOGGER.info(":::::START EmployeeServiceImpl.update():::::");
 
-        ObjectMapper objectMapper = new ObjectMapper();
         EmpSaveRequestDTO requestDTO = new EmpSaveRequestDTO();
-        EMPREQUESTSAVE empSaveRequestDTO = new EMPREQUESTSAVE();
         EmployeeDTO employeeDTO = new EmployeeDTO();
         EmployeeDTO employeeDTOFromDB = new EmployeeDTO();
         AddressDTO addressDTO = new AddressDTO();
         Employee employee = new Employee();
-
         Long employeeId = null;
 
-
-        if (employeeDtls != null) {
-            empSaveRequestDTO = objectMapper.readValue(employeeDtls, EMPREQUESTSAVE.class);
-        }
         if (empSaveRequestDTO != null) {
             employeeDTO = empSaveRequestDTO.getRequestDTO().getEmployeeDTO();
             addressDTO = empSaveRequestDTO.getRequestDTO().getAddressDTO();
@@ -139,14 +126,16 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
         employeeDTOFromDB = findEmployeeByPNo(employeeDTO.getPNo());
 
         if (employeeDTOFromDB.getEmployeeId() != null) {
-            employeeDTO.setEmployeeId(employeeDTOFromDB.getEmployeeId());
-            employeeDTO.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
-            employeeDTO.setActive(employeeDTOFromDB.getActive());
-           employeeDTO.setCreatedBy(employeeDTOFromDB.getCreatedBy());
-            employeeDTO.setCreatedDate(employeeDTOFromDB.getCreatedDate());
-            employeeDTO.setUpdatedDate(new Date());
+            employeeDTOFromDB.setPNo(employeeDTO.getPNo());
+            employeeDTOFromDB.setLastName(employeeDTO.getLastName());
+            employeeDTOFromDB.setFirstName(employeeDTO.getFirstName());
+            employeeDTOFromDB.setEmail(employeeDTO.getEmail());
+            employeeDTOFromDB.setDepartmentId(employeeDTO.getDepartmentId());
 
-            employee = this.dtoToEntity(employeeDTO);
+            employeeDTOFromDB.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
+            employeeDTOFromDB.setUpdatedDate(new Date());
+
+            employee = this.dtoToEntity(employeeDTOFromDB);
 
             employee = employeeRepository.save(employee);
         }
@@ -168,9 +157,8 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
 
     //Delete
     @Override
-    public EmployeeDTO deleteEmployee(String employeeDtls) throws JsonProcessingException {
+    public EmployeeDTO deleteEmployee(String employeeDtls) throws Exception {
         LOGGER.info(":::::START EmployeeServiceImpl.deleteEmployee():::::");
-        ObjectMapper objectMapper = new ObjectMapper();
         EmpSaveRequestDTO requestDTO = new EmpSaveRequestDTO();
         String employeeNo = null;
         EmpGetAndDeleteRequestDTO deleteRequestDTO  = new EmpGetAndDeleteRequestDTO();
@@ -179,37 +167,25 @@ public class EmployeeServiceImpl implements EmployeeServiceI {
         Employee employee = new Employee();
 
         if (employeeDtls != null) {
-            deleteRequestDTO  = objectMapper.readValue(employeeDtls, EmpGetAndDeleteRequestDTO.class);
+            //Check if employee exist then update:
+            employeeDTOFromDB  = findEmployeeByPNo(employeeDtls);
         }
-        if (deleteRequestDTO != null) {
-            employeeNo = deleteRequestDTO.getPNo();
-        }
-
-        //Check if employee exist then update:
-        employeeDTOFromDB = findEmployeeByPNo(employeeNo);
 
         if (employeeDTOFromDB.getEmployeeId() != null) {
 
-            employeeDTO.setEmployeeId(employeeDTOFromDB.getEmployeeId());
-            employeeDTO.setPNo(employeeDTOFromDB.getPNo());
-            employeeDTO.setFirstName(employeeDTOFromDB.getFirstName());
-            employeeDTO.setLastName(employeeDTOFromDB.getLastName());
-            employeeDTO.setEmail(employeeDTOFromDB.getEmail());
-            employeeDTO.setAddressId(employeeDTOFromDB.getAddressId());
-            employeeDTO.setEmail(employeeDTOFromDB.getEmail());
-            employeeDTO.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
-            employeeDTO.setCreatedBy(employeeDTOFromDB.getCreatedBy());
-            employeeDTO.setCreatedDate(employeeDTOFromDB.getCreatedDate());
-            employeeDTO.setUpdatedDate(new Date());
-            employeeDTO.setActive(EmployeeConstant.IN_ACTIVE);
+            employeeDTOFromDB.setUpdatedDate(new Date());
+            employeeDTOFromDB.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
+            employeeDTOFromDB.setActive(EmployeeConstant.IN_ACTIVE);
 
-            employee = this.dtoToEntity(employeeDTO);
+            employee = this.dtoToEntity(employeeDTOFromDB);
 
             employee = employeeRepository.save(employee);
+
+            //convert employee dto to entity
+            employeeDTO = this.entityToDTO(employee);
         }
 
-        //convert employee dto to entity
-        employeeDTO = this.entityToDTO(employee);
+
         LOGGER.info(":::::EXIT EmployeeServiceImpl.deleteEmployee():::::");
 
         return employeeDTO;

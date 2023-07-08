@@ -59,20 +59,14 @@ public class AddressServiceImpl implements AddressServiceI {
         AddressDTO dtoFromDB = new AddressDTO();
 
         Address address = new Address();
-        if (addressDTO == null) {
-            return null;
-        }
 
         dtoFromDB = this.findAddressByEmployeeId(addressDTO.getEmployeeId());
 
         if (dtoFromDB.getAddressId() != null) {
-            addressDTO.setAddressId(dtoFromDB.getAddressId());
-            addressDTO.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
-            addressDTO.setUpdatedDate(new Date());
-            addressDTO.setCreatedBy(dtoFromDB.getCreatedBy());
-            addressDTO.setCreatedDate(dtoFromDB.getCreatedDate());
-            // addressDTO.setEmployeeId(addressDTO.getEmployeeId());
-            address = this.dtoToEntity(addressDTO);
+            dtoFromDB.setUpdatedBy(EmployeeConstant.SYSTEM_ID);
+            dtoFromDB.setUpdatedDate(new Date());
+
+            address = this.dtoToEntity(dtoFromDB);
 
 
         }
@@ -165,7 +159,7 @@ public class AddressServiceImpl implements AddressServiceI {
             dto.setAddress(address.getAddress());
         }
         if (address.getPhone() != null) {
-            dto.setAddress(address.getPhone());
+            dto.setPhone(address.getPhone());
         }
         if (address.getEmployeeId() != null) {
             dto.setEmployeeId(address.getEmployeeId());

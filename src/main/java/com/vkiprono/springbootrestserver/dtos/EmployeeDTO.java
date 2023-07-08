@@ -34,8 +34,8 @@ public class EmployeeDTO implements Serializable {
     @JsonProperty("email")
     private String email;
 
-    @JsonProperty("addressId")
-    private Long addressId;
+/*    @JsonProperty("addressId")
+    private Long addressId;*/
 
     @JsonProperty("departmentId")
     private Long departmentId;

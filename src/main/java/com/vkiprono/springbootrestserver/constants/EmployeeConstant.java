@@ -35,8 +35,8 @@ public class EmployeeConstant {
     public static String SUCCESS_CODE_VIEW = "20005";
     public static String SUCCESS_MESSAGE_VIEW = "Employee found";
 
-    public static String UNSUCCESSFUL_CODE_VIEW = "20006";
-    public static String UNSUCCESSFUL_MESSAGE_VIEW = "Employee Not found";
+    public static String EMPLOYEE_NOT_FOUND_CODE= "20006";
+    public static String EMPLOYEE_NOT_FOUND_MESSAGE = "Employee Not found";
 
     //Data Validation:
 
