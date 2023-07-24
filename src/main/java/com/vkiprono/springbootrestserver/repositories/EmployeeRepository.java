@@ -1,4 +1,4 @@
-package com.vkiprono.springbootrestserver.respositories;
+package com.vkiprono.springbootrestserver.repositories;
 
 import com.vkiprono.springbootrestserver.models.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;

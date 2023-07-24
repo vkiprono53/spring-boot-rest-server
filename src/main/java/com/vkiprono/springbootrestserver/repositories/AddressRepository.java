@@ -1,8 +1,6 @@
-package com.vkiprono.springbootrestserver.respositories;
+package com.vkiprono.springbootrestserver.repositories;
 
-import com.vkiprono.springbootrestserver.dtos.AddressDTO;
 import com.vkiprono.springbootrestserver.models.Address;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -3,7 +3,7 @@ package com.vkiprono.springbootrestserver.services.impl;
 import com.vkiprono.springbootrestserver.constants.EmployeeConstant;
 import com.vkiprono.springbootrestserver.dtos.AddressDTO;
 import com.vkiprono.springbootrestserver.models.Address;
-import com.vkiprono.springbootrestserver.respositories.AddressRepository;
+import com.vkiprono.springbootrestserver.repositories.AddressRepository;
 import com.vkiprono.springbootrestserver.services.AddressServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

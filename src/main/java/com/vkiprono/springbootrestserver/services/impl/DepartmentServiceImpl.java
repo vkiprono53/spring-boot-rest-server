@@ -1,7 +1,7 @@
 package com.vkiprono.springbootrestserver.services.impl;
 
 import com.vkiprono.springbootrestserver.models.Department;
-import com.vkiprono.springbootrestserver.respositories.DepartmentRepository;
+import com.vkiprono.springbootrestserver.repositories.DepartmentRepository;
 import com.vkiprono.springbootrestserver.services.DepartmentServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -122,6 +122,7 @@ public class EmployeeRestController {
         AddressDTO addressDTO = new AddressDTO();
         EMPREQUESTSAVE empSaveRequestDTO = new EMPREQUESTSAVE();
 
+
         StringBuilder output = new StringBuilder();
         JsonMapper jsonMapper = new JsonMapper();
         String responseCode = "";
@@ -203,8 +204,8 @@ public class EmployeeRestController {
     }
 
     //Get Employee Details:
-    @GetMapping
-    public String getEmployeeDetails(@RequestBody String employeePno) throws Exception {
+    @GetMapping("/{employeePno}")
+    public String getEmployeeDetails(@PathVariable String employeePno) throws Exception {
         logger.info(":::::START EmployeeRestController.getEmployeeDetails():::::");
 
         StringBuilder output = new StringBuilder();
@@ -217,16 +218,15 @@ public class EmployeeRestController {
         ResponseDTO response = new ResponseDTO();
         EmployeeDTO employeeDTO = null;
         EmployeeDtls employeeDtls = new EmployeeDtls();
+        EMPGETRESPONSE empgetresponse = new EMPGETRESPONSE();
 
         try {
 
-            requestDTO = jsonMapper.readValue(employeePno, EmpGetAndDeleteRequestDTO.class);
-
-            if (requestDTO.getPNo() == null || requestDTO.getPNo().trim().isEmpty()) {
+            if (employeePno == null || employeePno.isEmpty()) {
                 throw new DataValidationException(EmployeeConstant.DATA_VALIDATION_MESSAGE_ERROR);
               }
 
-            employeeDTO = employeeServiceI.findEmployeeByPNo(requestDTO.getPNo());
+            employeeDTO = employeeServiceI.findEmployeeByPNo(employeePno);
 
             if (employeeDTO != null){
                 responseCode = EmployeeConstant.SUCCESS_CODE_VIEW;
@@ -263,8 +263,10 @@ public class EmployeeRestController {
         response.setStatus(responseStatus);
 
         empGetResponseDTO.setResponseDTO(response);
+        empgetresponse.setEmpGetResponseDTO(empGetResponseDTO);
 
-        output.append(jsonMapper.writeValueAsString(empGetResponseDTO));
+
+        output.append(jsonMapper.writeValueAsString(empgetresponse));
 
         logger.info("::::END EmployeeRestController.getEmployeeDetails():::::");
 
@@ -278,10 +280,8 @@ public class EmployeeRestController {
 
         JsonMapper jsonMapper = new JsonMapper();
         EmpGetAndDeleteRequestDTO requestDTO = new EmpGetAndDeleteRequestDTO();
-        EmpGetResponseDTO empGetResponseDTO = new EmpGetResponseDTO();
         ResponseDTO response = new ResponseDTO();
         EmployeeDTO employeeDTO = null;
-        EmployeeDtls employeeDtls = new EmployeeDtls();
         String responseCode = "";
         String responseMessage = "";
         String responseStatus = "";
@@ -309,18 +309,11 @@ public class EmployeeRestController {
                 responseMessage = EmployeeConstant.SUCCESS_MESSAGE_DELETE;
                 responseStatus = EmployeeConstant.STATUS_OK;
 
-                employeeDtls.setPNo(employeeDTO.getPNo());
-                employeeDtls.setFirstName(employeeDTO.getFirstName());
-                employeeDtls.setLastName(employeeDTO.getLastName());
-                
-                empGetResponseDTO.setEmployeeDtls(employeeDtls);
-
             }
             else {
                 throw new EmployeeDeleteException(EmployeeConstant.FAILED_MESSAGE_DELETE);
             }
         }
-
         catch (DataValidationException exception){
             logger.info(":::::DataValidationException EmployeeRestController.deleteEmployee():::::");
             responseCode = EmployeeConstant.DATA_VALIDATION_CODE_ERROR;
@@ -343,9 +336,7 @@ public class EmployeeRestController {
         response.setMessage(responseMessage);
         response.setStatus(responseStatus);
 
-        empGetResponseDTO.setResponseDTO(response);
-
-        output.append(jsonMapper.writeValueAsString(empGetResponseDTO));
+        output.append(jsonMapper.writeValueAsString(response));
 
         logger.info("::::END EmployeeRestController.deleteEmployee():::::");
 

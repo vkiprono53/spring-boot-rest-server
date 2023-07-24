@@ -26,18 +26,19 @@ CREATE INDEX idx_employee_employee_id
     ON employees(employee_id);
 
 --ADDRESS TABLE
+--ADDRESS TABLE
 CREATE TABLE addresses(
-                        address_id int,
-                        employee_id int,
-                        address character varying(100),
-                        phone character varying(15),
-                        postal_code character varying(20),
-                        created_by int,
-                        created_date TIMESTAMP WITHOUT TIME ZONE,
-                        updated_by  int,
-                        updated_date TIMESTAMP WITHOUT TIME ZONE,
-                        PRIMARY KEY(address_id)
-                        FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
+                          address_id int,
+                          employee_id int,
+                          address character varying(100),
+                          phone character varying(15),
+                          postal_code character varying(20),
+                          created_by int,
+                          created_date TIMESTAMP WITHOUT TIME ZONE,
+                          updated_by  int,
+                          updated_date TIMESTAMP WITHOUT TIME ZONE,
+                          PRIMARY KEY(address_id),
+                              FOREIGN KEY(employee_id) REFERENCES employees(employee_id)
 );
 ---addresses sequence:
 CREATE SEQUENCE addresses_seq
