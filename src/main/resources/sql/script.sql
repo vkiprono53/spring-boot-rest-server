@@ -1,3 +1,4 @@
+--**************************************************************************--
 --EMPLOYEE
 CREATE TABLE employees(
                          employee_id int,
@@ -25,7 +26,7 @@ OWNED BY employees.employee_id;
 CREATE INDEX idx_employee_employee_id
     ON employees(employee_id);
 
---ADDRESS TABLE
+--**************************************************************************--
 --ADDRESS TABLE
 CREATE TABLE addresses(
                           address_id int,
@@ -51,6 +52,8 @@ OWNED BY addresses.address_id;
 CREATE INDEX idx_address_address_id
     ON addresses(address_id);
 
+--**************************************************************************--
+
 --DEPARTMENT
 CREATE TABLE departments(
                            department_id int,
@@ -68,8 +71,34 @@ CREATE SEQUENCE departments_seq
     START 1
 INCREMENT 1
 MAXVALUE 9999999999
-OWNED BY departments.department_id
+OWNED BY departments.department_id;
 
---Address index
+--Department index
 CREATE INDEX idx_department_department_id
     ON departments(department_id);
+
+--**************************************************************************--
+
+--DROP TABLE user_dtls
+--user_dtls table
+CREATE TABLE user_dtls(
+                          user_id INTEGER ,
+                          first_name character varying(100),
+                          last_name character varying(100),
+                          email character varying(100),
+                          password character varying(100),
+                          role character varying(50),
+                          PRIMARY KEY(user_id));
+
+--user_dtls sequence
+CREATE SEQUENCE user_dtls_seq
+    START 1
+INCREMENT 1
+MAXVALUE 9999999999
+OWNED BY user_dtls.user_id;
+
+--user_dtls index
+CREATE INDEX idx_user_dtls_user_id
+    ON user_dtls(user_id);
+
+--**************************************************************************--
