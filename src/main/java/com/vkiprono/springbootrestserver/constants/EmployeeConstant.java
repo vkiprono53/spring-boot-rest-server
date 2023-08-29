@@ -43,6 +43,10 @@ public class EmployeeConstant {
     public static String DATA_VALIDATION_CODE_ERROR = "20008";
     public static String DATA_VALIDATION_MESSAGE_ERROR = "Data Validation Error";
 
+    public static String USER_NOT_FOUND_MESSAGE = "User Not found";
+    public static String USER_NOT_FOUND_CODE= "20009";
+
+
     //Status
     public static String STATUS_OK = "OK";
     public static String STATUS_NOK = "NOK";

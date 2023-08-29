@@ -1,9 +1,11 @@
 package com.vkiprono.springbootrestserver.services.impl;
 
+import com.vkiprono.springbootrestserver.constants.EmployeeConstant;
 import com.vkiprono.springbootrestserver.dtos.AuthenticateRequest;
 import com.vkiprono.springbootrestserver.dtos.AuthenticationResponseDTO;
 import com.vkiprono.springbootrestserver.dtos.RegisterRequest;
 import com.vkiprono.springbootrestserver.enums.Role;
+import com.vkiprono.springbootrestserver.exceptions.UserNotFoundException;
 import com.vkiprono.springbootrestserver.models.User;
 import com.vkiprono.springbootrestserver.repositories.UserRepository;
 import com.vkiprono.springbootrestserver.services.AuthServiceI;
@@ -57,13 +59,6 @@ public class AuthServiceImpl implements AuthServiceI {
     @Override
     public AuthenticationResponseDTO authenticate(AuthenticateRequest authenticateRequest) {
 
-/*
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticateRequest.getEmail(), authenticateRequest.getPassword()));
-        var user = userRepository.findUserByEmail(authenticateRequest.getEmail());
-        var jwt = jwtUtility.generateToken(user);
-        return AuthenticationResponseDTO.builder().token(jwt).build();*/
-
 
         logger.info(":::::START AuthServiceImpl.authenticate():::::");
         AuthenticationResponseDTO responseDTO = new AuthenticationResponseDTO();
@@ -80,6 +75,7 @@ public class AuthServiceImpl implements AuthServiceI {
             String token = jwtUtility.generateToken(user);
             responseDTO.setToken(token);
         }
+
         logger.info(":::::EXIT AuthServiceImpl.authenticate():::::");
 
         return responseDTO;
@@ -102,7 +98,13 @@ public class AuthServiceImpl implements AuthServiceI {
         if (registerRequest.getPassword() != null){
             user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         }
-        user.setRole(Role.USER);
+        if (registerRequest.getPassword() == null){
+            user.setRole(Role.USER);
+        }
+        else {
+            user.setRole(registerRequest.getRole());
+        }
+
 
         return user;
     }
